@@ -1054,14 +1054,12 @@ namespace flea_market_service.Core.Bots
                 case "delete":
                     await ShowDeleteConfirmationAsync(chatId, offerId, cancellationToken);
                     break;
-                case "confirm" when parts[2] == "delete" && parts.Length == 4:
-                    var deleteOfferId = long.Parse(parts[3]);
-                    await UpdateOfferStatusAsync(chatId, deleteOfferId, "DELETED", "удалено", cancellationToken);
+                case "confirmDelete":
+                    await UpdateOfferStatusAsync(chatId, offerId, "DELETED", "удалено", cancellationToken);
                     break;
                 case "field" when parts.Length == 4:
-                    var fieldOfferId = long.Parse(parts[2]);
                     var field = parts[3];
-                    await StartFieldEditingAsync(chatId, fieldOfferId, field, cancellationToken);
+                    await StartFieldEditingAsync(chatId, offerId, field, cancellationToken);
                     break;
             }
         }
@@ -1134,7 +1132,7 @@ namespace flea_market_service.Core.Bots
             {
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData("✅ Да", $"offer_confirm_delete_{offerId}"),
+                    InlineKeyboardButton.WithCallbackData("✅ Да", $"offer_confirmDelete_{offerId}"),
                     InlineKeyboardButton.WithCallbackData("❌ Нет", $"offer_details_{offerId}")
                 }
             });
